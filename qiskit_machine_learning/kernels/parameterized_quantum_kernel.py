@@ -218,11 +218,12 @@ class ParamQuantumKernel(QuantumKernel):
         # check that params are the right dimension
         self.bind_free_params(params)
         K = self.evaluate(x_vec)
+        Kinv = np.linalg.pinv(K)
         y = np.array(y_vec)
         
         # The -1 is here because qiskit 
         # optimizers minimize by default
-        return -1 * y.T @ np.linalg.pinv(K) @ y
+        return -1 * y.T @ Kinv @ y
 
     def train_kernel(self,
                      objective_function = 'alignment',
